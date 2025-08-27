@@ -32,10 +32,17 @@ func Normalize(gd *pprof.GoroutineDump) ([]Goroutine, error) {
 			}(v)
 
 		}
-		if strings.Contains(v, "goroutine") && len(goroutine) != 0 {
-			Goroutines = append(Goroutines, goroutine)
-			goroutine = Goroutine{}
+		if strings.Contains(v, "goroutine") {
+
+			re := regexp.MustCompile(`^goroutine\s+\d+`)
+			v = re.ReplaceAllString(v, "")
+			if len(goroutine) != 0 {
+
+				Goroutines = append(Goroutines, goroutine)
+				goroutine = Goroutine{}
+			}
 		}
+
 		goroutine = append(goroutine, v)
 
 	}
