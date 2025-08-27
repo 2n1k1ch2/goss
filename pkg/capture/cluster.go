@@ -98,7 +98,7 @@ func findStatus(g *Goroutine) (string, error) {
 		return DEAD, nil
 	}
 
-	return "", errors.New("Can't get status")
+	return "", errors.New("cant get status")
 
 }
 
@@ -109,7 +109,7 @@ func giveName(g *Goroutine) string {
 
 func hashGoroutine(g *Goroutine) (string, error) {
 	if len(*g) < 2 {
-		return "", errors.New("Cant get hash")
+		return "", errors.New("cant get hash")
 	}
 
 	// make frames
