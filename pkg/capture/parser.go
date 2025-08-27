@@ -24,9 +24,7 @@ func Normalize(gd *pprof.GoroutineDump) ([]Goroutine, error) {
 		if strings.Contains(v, "created by") {
 			continue
 		}
-		if strings.Contains(v, "+0x") {
-			v = strings.Replace(v, "+0x", "", -1)
-		}
+		v = strings.Replace(v, "+0x", "", -1)
 		if strings.Contains(v, "(") {
 			v = func(string) string {
 				re := regexp.MustCompile(`\([^()]*\)$`)
