@@ -25,11 +25,11 @@ const (
 type Cluster = map[string]Object
 
 type Object struct {
-	hash   string
-	status string
-	name   string
-	frames []string
-	count  uint64
+	hash   string   `json:"hash"`
+	status string   `json:"status"`
+	name   string   `json:"name"`
+	frames []string `json:"-"`
+	count  uint64   `json:"count"`
 }
 
 func Clusterize(gors []Goroutine) Cluster {
