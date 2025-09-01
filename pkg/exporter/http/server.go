@@ -35,7 +35,7 @@ func metricsHandler(w http.ResponseWriter, r *http.Request, exporter *prometheus
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	_, err = w.Write(data)
+
 	if _, err := w.Write(data); err != nil {
 		log.Printf("Failed to write response: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
