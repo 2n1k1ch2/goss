@@ -17,7 +17,11 @@ func NewServer() *Server {
 }
 
 func (s *Server) Start() {
-	http.ListenAndServe(":8080", s.mux)
+	err := http.ListenAndServe(":8080", s.mux)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+
+	}
 	s.mux.HandleFunc("/debug/goss/clusters", func(w http.ResponseWriter, r *http.Request) {
 		metricsHandler(w, r, &s.exporter)
 	})
@@ -31,6 +35,11 @@ func metricsHandler(w http.ResponseWriter, r *http.Request, exporter *prometheus
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write(data)
+	_, err = w.Write(data)
+	if _, err := w.Write(data); err != nil {
+		log.Printf("Failed to write response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
 }

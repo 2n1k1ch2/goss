@@ -25,11 +25,12 @@ const (
 type Cluster = map[string]Object
 
 type Object struct {
-	hash   string   `json:"hash"`
-	status string   `json:"status"`
-	name   string   `json:"name"`
-	frames []string `json:"-"`
-	count  uint64   `json:"count"`
+	Hash   string   `json:"hash"`
+	Status string   `json:"status"`
+	Name   string   `json:"name"`
+	Frames []string `json:"-"`
+	Count  uint64   `json:"count"`
+	Ids    []uint64 `json:"ids"`
 }
 
 func Clusterize(gors []Goroutine) Cluster {
@@ -49,16 +50,16 @@ func Clusterize(gors []Goroutine) Cluster {
 
 		if existing, exists := cluster[hsh]; exists {
 			existing.count += 1
+			existing.ids = append(existing.ids, g.id)
 			cluster[hsh] = existing
-
 		} else {
-
 			cluster[hsh] = Object{
 				hash:   hsh,
 				status: status,
 				name:   name,
-				frames: g[1:],
+				frames: g.data[1:],
 				count:  1,
+				ids:    []uint64{g.id},
 			}
 		}
 	}
@@ -66,35 +67,35 @@ func Clusterize(gors []Goroutine) Cluster {
 }
 
 func findStatus(g *Goroutine) (string, error) {
-	fmt.Println((*g)[0])
-	if strings.Contains((*g)[0], "running") {
+	fmt.Println(g.data)
+	if strings.Contains(g.data[0], "running") {
 		return RUNNING, nil
 	}
-	if strings.Contains((*g)[0], "runnable") {
+	if strings.Contains(g.data[0], "runnable") {
 		return RUNNABLE, nil
 	}
-	if strings.Contains((*g)[0], "sleep") {
+	if strings.Contains(g.data[0], "sleep") {
 		return SLEEP, nil
 	}
-	if strings.Contains((*g)[0], "chan send") {
+	if strings.Contains(g.data[0], "chan send") {
 		return CHAN_SEND, nil
 	}
-	if strings.Contains((*g)[0], "chan receive") {
+	if strings.Contains(g.data[0], "chan receive") {
 		return CHAN_RECEIVE, nil
 	}
-	if strings.Contains((*g)[0], "select") {
+	if strings.Contains(g.data[0], "select") {
 		return SELECT, nil
 	}
-	if strings.Contains((*g)[0], "io wait") {
+	if strings.Contains(g.data[0], "io wait") {
 		return IO_WAIT, nil
 	}
-	if strings.Contains((*g)[0], "system call") {
+	if strings.Contains(g.data[0], "system call") {
 		return SYSTEM_CALL, nil
 	}
-	if strings.Contains((*g)[0], "gc sweep") {
+	if strings.Contains(g.data[0], "gc sweep") {
 		return GC_SWEEP, nil
 	}
-	if strings.Contains((*g)[0], "dead") {
+	if strings.Contains(g.data[0], "dead") {
 		return DEAD, nil
 	}
 
@@ -103,17 +104,17 @@ func findStatus(g *Goroutine) (string, error) {
 }
 
 func giveName(g *Goroutine) string {
-	str := strings.Split((*g)[0], ":")
+	str := strings.Split(g.data[0], ":")
 	return str[1]
 }
 
 func hashGoroutine(g *Goroutine) (string, error) {
-	if len(*g) < 2 {
+	if len(g.data) < 2 {
 		return "", errors.New("cant get hash")
 	}
 
 	// make frames
-	combined := strings.Join((*g)[1:], "")
+	combined := strings.Join(g.data[1:], "")
 
 	// then get hash from frames
 	hasher := sha256.New()
