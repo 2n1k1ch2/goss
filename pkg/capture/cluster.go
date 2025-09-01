@@ -49,17 +49,17 @@ func Clusterize(gors []Goroutine) Cluster {
 		}
 
 		if existing, exists := cluster[hsh]; exists {
-			existing.count += 1
-			existing.ids = append(existing.ids, g.id)
+			existing.Count += 1
+			existing.Ids = append(existing.Ids, g.id)
 			cluster[hsh] = existing
 		} else {
 			cluster[hsh] = Object{
-				hash:   hsh,
-				status: status,
-				name:   name,
-				frames: g.data[1:],
-				count:  1,
-				ids:    []uint64{g.id},
+				Hash:   hsh,
+				Status: status,
+				Name:   name,
+				Frames: g.data[1:],
+				Count:  1,
+				Ids:    []uint64{g.id},
 			}
 		}
 	}
