@@ -31,6 +31,7 @@ type Object struct {
 	Frames []string `json:"-"`
 	Count  uint64   `json:"count"`
 	Ids    []uint64 `json:"ids"`
+	Score  uint64   `json:"score"`
 }
 
 func Clusterize(gors []Goroutine) Cluster {
