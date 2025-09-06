@@ -1,19 +1,19 @@
 package prometheus
 
 import (
-	"goss/pkg/capture"
+	"goss/pkg/cluster"
 )
 
 type Exporter struct {
-	Cluster capture.Cluster
+	Cluster cluster.Cluster
 }
 
 func NewExporter() *Exporter {
 	return &Exporter{
-		Cluster: map[string]capture.Object{},
+		Cluster: map[string]cluster.Object{},
 	}
 }
 
-func (e *Exporter) UpdateMetrics(cluster capture.Cluster) {
+func (e *Exporter) UpdateMetrics(cluster cluster.Cluster) {
 	e.Cluster = cluster
 }

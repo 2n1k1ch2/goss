@@ -1,10 +1,11 @@
-package capture
+package cluster
 
 import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"goss/pkg/parser"
 	"log"
 	"strings"
 )
@@ -34,7 +35,7 @@ type Object struct {
 	Score  uint64   `json:"score"`
 }
 
-func Clusterize(gors []Goroutine) Cluster {
+func Clusterize(gors []parser.Goroutine) Cluster {
 	cluster := make(Cluster)
 	for _, g := range gors {
 		status, err := findStatus(&g)
@@ -67,7 +68,7 @@ func Clusterize(gors []Goroutine) Cluster {
 	return cluster
 }
 
-func findStatus(g *Goroutine) (string, error) {
+func findStatus(g *parser.Goroutine) (string, error) {
 	fmt.Println(g.data)
 	if strings.Contains(g.data[0], "running") {
 		return RUNNING, nil
@@ -104,12 +105,12 @@ func findStatus(g *Goroutine) (string, error) {
 
 }
 
-func giveName(g *Goroutine) string {
+func giveName(g *parser.Goroutine) string {
 	str := strings.Split(g.data[0], ":")
 	return str[1]
 }
 
-func hashGoroutine(g *Goroutine) (string, error) {
+func hashGoroutine(g *parser.Goroutine) (string, error) {
 	if len(g.data) < 2 {
 		return "", errors.New("cant get hash")
 	}
