@@ -1,8 +1,8 @@
 package suspicion
 
-import "goss/pkg/capture"
+import "goss/pkg/cluster"
 
-func ruleBigCluster(_ *capture.Cluster, obj *capture.Object) {
+func ruleBigCluster(_ *cluster.Cluster, obj *cluster.Object) {
 	switch obj.Count {
 	case 100:
 		obj.Score += 5
@@ -13,11 +13,11 @@ func ruleBigCluster(_ *capture.Cluster, obj *capture.Object) {
 	}
 }
 
-func ruleSendNoRecv(cluster *capture.Cluster, obj *capture.Object) {
-	if obj.Status == capture.CHAN_SEND {
+func ruleSendNoRecv(cl *cluster.Cluster, obj *cluster.Object) {
+	if obj.Status == cluster.CHAN_SEND {
 		i := 0
-		for _, v := range *cluster {
-			if v.Status == capture.CHAN_RECEIVE {
+		for _, v := range *cl {
+			if v.Status == cluster.CHAN_RECEIVE {
 				i++
 			}
 		}
@@ -26,6 +26,6 @@ func ruleSendNoRecv(cluster *capture.Cluster, obj *capture.Object) {
 		}
 	}
 }
-func ruleSleep(_ *capture.Cluster, obj *capture.Object) {
+func ruleSleep(_ *cluster.Cluster, obj *cluster.Object) {
 
 }

@@ -1,6 +1,7 @@
-package capture
+package cluster
 
 import (
+	"goss/pkg/parser"
 	"goss/pkg/pprof"
 	"testing"
 	"time"
@@ -15,7 +16,7 @@ func TestCluserize(t *testing.T) {
 	time.Sleep(time.Second)
 	dump := pprof.CaptureAll()
 
-	goroutines, err := Normalize(dump)
+	goroutines, err := parser.Normalize(dump)
 
 	if err != nil {
 		t.Fatal(err)
