@@ -10,8 +10,8 @@ import (
 )
 
 type Goroutine struct {
-	data []string
-	id   uint64
+	Data []string
+	Id   uint64
 }
 
 func Normalize(gd *pprof.GoroutineDump) ([]Goroutine, error) {
@@ -44,23 +44,23 @@ func Normalize(gd *pprof.GoroutineDump) ([]Goroutine, error) {
 			if len(matches) > 1 {
 				id, err := strconv.ParseUint(matches[1], 10, 64)
 				if err == nil {
-					goroutine.id = id
+					goroutine.Id = id
 				} else {
 					log.Printf("failed to parse goroutine id: %v", err)
 				}
 			}
 			v = re.ReplaceAllString(v, "")
-			if len(goroutine.data) != 0 {
+			if len(goroutine.Data) != 0 {
 
 				Goroutines = append(Goroutines, goroutine)
 				goroutine = Goroutine{}
 			}
 		}
 
-		goroutine.data = append(goroutine.data, v)
+		goroutine.Data = append(goroutine.Data, v)
 
 	}
-	if goroutine.data != nil {
+	if goroutine.Data != nil {
 		Goroutines = append(Goroutines, goroutine)
 	}
 
