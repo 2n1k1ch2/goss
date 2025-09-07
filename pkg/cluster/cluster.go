@@ -26,13 +26,14 @@ const (
 type Cluster = map[string]Object
 
 type Object struct {
-	Hash   string   `json:"hash"`
-	Status string   `json:"status"`
-	Name   string   `json:"name"`
-	Frames []string `json:"-"`
-	Count  uint64   `json:"count"`
-	Ids    []uint64 `json:"ids"`
-	Score  uint64   `json:"score"`
+	Hash       string   `json:"hash"`
+	Status     string   `json:"status"`
+	Name       string   `json:"name"`
+	Frames     []string `json:"-"`
+	Count      uint64   `json:"count"`
+	Ids        []uint64 `json:"ids"`
+	Score      uint64   `json:"score"`
+	Drift_rate float64  `json:"drift_rate"`
 }
 
 func Clusterize(gors []parser.Goroutine) Cluster {
