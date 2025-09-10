@@ -6,18 +6,39 @@ import (
 )
 
 type Store struct {
-	Items []item
-	Size  int
+	SnapShots []SnapShot
+	Size      int
 }
-type item struct {
+type SnapShot struct {
 	cl        cluster.Cluster
 	timestamp time.Time
 }
 
 func (s *Store) Add(cl cluster.Cluster) {
-	if len(s.Items) < s.Size {
-		s.Items = append(s.Items, item{cl, time.Time{}})
+	s.ComputeDrift(&cl)
+	if len(s.SnapShots) < s.Size {
+		s.SnapShots = append(s.SnapShots, SnapShot{cl, time.Time{}})
 		return
 	}
-	s.Items = append(s.Items[1:], item{cl, time.Time{}})
+	s.SnapShots = append(s.SnapShots[1:], SnapShot{cl, time.Time{}})
+
+}
+func (s *Store) ComputeDrift(cl *cluster.Cluster) {
+	last := s.SnapShots[len(s.SnapShots)-1]
+	currentTime := time.Now()
+
+	for hash := range *cl {
+		if val, exists := last.cl[hash]; exists {
+			timeDiff := currentTime.Sub(last.timestamp).Seconds()
+
+			if timeDiff > 0 {
+				countDiff := float64((*cl)[hash].Count - val.Count)
+				drift := countDiff / timeDiff
+
+				obj := (*cl)[hash]
+				obj.Drift_rate = drift
+				(*cl)[hash] = obj
+			}
+		}
+	}
 }
