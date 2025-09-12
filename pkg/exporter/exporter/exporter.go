@@ -1,4 +1,4 @@
-package prometheus
+package exporter
 
 import (
 	"goss/pkg/cluster"
