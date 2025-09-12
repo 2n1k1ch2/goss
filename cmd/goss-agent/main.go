@@ -2,7 +2,10 @@ package goss_agent
 
 import (
 	"flag"
+	"goss/pkg/alerting"
 	"goss/pkg/config"
+	"goss/pkg/exporter/http"
+	"goss/pkg/store"
 	"log"
 	"os"
 )
@@ -14,8 +17,11 @@ var (
 )
 
 type Runner struct {
-	logger *log.Logger
-	cfg    config.Config
+	logger  *log.Logger
+	cfg     config.Config
+	alerter *alerting.Alerter
+	server  *http.Server
+	store   *store.Store
 }
 
 func init() {
@@ -32,9 +38,12 @@ func NewRunner(cfg config.Config) *Runner {
 	} else {
 		logger = log.New(os.Stdout, "[INFO] ", log.LstdFlags)
 	}
-
+	out := make(chan alerting.Alert)
 	return &Runner{
-		logger: logger,
-		cfg:    cfg,
+		logger:  logger,
+		cfg:     cfg,
+		alerter: alerting.NewAlerter(1000, out),
+		server:  http.NewServer(),
+		store:   store.NewStore(10),
 	}
 }

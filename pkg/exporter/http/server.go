@@ -2,14 +2,14 @@ package http
 
 import (
 	"encoding/json"
-	"goss/pkg/exporter/prometheus"
+	"goss/pkg/exporter/exporter"
 	"log"
 	"net/http"
 )
 
 type Server struct {
 	mux      *http.ServeMux
-	exporter prometheus.Exporter
+	exporter exporter.Exporter
 }
 
 func NewServer() *Server {
@@ -27,7 +27,7 @@ func (s *Server) Start() {
 	})
 
 }
-func metricsHandler(w http.ResponseWriter, r *http.Request, exporter *prometheus.Exporter) {
+func metricsHandler(w http.ResponseWriter, r *http.Request, exporter *exporter.Exporter) {
 	data, err := json.Marshal(exporter.Cluster)
 	if err != nil {
 		log.Println(err)

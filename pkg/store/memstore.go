@@ -14,6 +14,12 @@ type SnapShot struct {
 	timestamp time.Time
 }
 
+func NewStore(size int) *Store {
+	return &Store{
+		SnapShots: make([]SnapShot, size),
+		Size:      size,
+	}
+}
 func (s *Store) Add(cl cluster.Cluster) {
 	s.ComputeDrift(&cl)
 	if len(s.SnapShots) < s.Size {
