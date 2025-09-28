@@ -17,10 +17,14 @@ type Config struct {
 	RetentionSnapshots int           `yaml:"retention_snapshots"`
 	RetentionWindow    time.Duration `yaml:"retention_window"`
 	ReleaseEnv         []string      `yaml:"release_env"`
-	CloudEnabled       bool          `yaml:"cloud_enabled"`
-	CloudURL           string        `yaml:"cloud_url"`
-	CloudAuth          string        `yaml:"cloud_auth"`
-	RedactionEnabled   bool          `yaml:"redaction_enabled"`
+
+	CloudEnabled bool   `yaml:"cloud_enabled"`
+	CloudURL     string `yaml:"cloud_url"`
+	CloudAuth    string `yaml:"cloud_auth"`
+	AgentID      string `yaml:"agent_id"`
+	ReleaseTag   string `yaml:"release_tag"`
+
+	RedactionEnabled bool `yaml:"redaction_enabled"`
 }
 
 func Load(path string) (*Config, error) {
@@ -59,6 +63,8 @@ func DefaultConfig() *Config {
 		CloudEnabled:       false,
 		CloudURL:           "",
 		CloudAuth:          "",
+		AgentID:            "",
+		ReleaseTag:         "",
 		RedactionEnabled:   false,
 	}
 }
