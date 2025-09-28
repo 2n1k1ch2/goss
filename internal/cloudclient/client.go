@@ -33,6 +33,7 @@ func (c *CloudClient) SendSnapshot(ctx context.Context, cluster *cluster.Cluster
 	if err != nil {
 		return err
 	}
+	req.Header.Set("Authorization", "Bearer "+c.authToken)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Content-Encoding", "gzip")
 
