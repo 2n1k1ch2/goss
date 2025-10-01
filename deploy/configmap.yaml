@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: goss-config
+data:
+  config.yaml: |
+    mode: embedded
+    sampleInterval: 60s
+    httpBind: "0.0.0.0:8080"
+    prometheusEnabled: true
+    prometheusBind: 9090
