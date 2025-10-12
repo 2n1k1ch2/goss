@@ -48,9 +48,6 @@ agent.Start(ctx, agent.DefaultConfig())
     // ... your application code ...
 }
 ```
-Key Prometheus metrics will be available at /metrics:
-
-stackscope_goroutines_total{signature="abc123"}
 
 ## Contributing
 We welcome contributions! Please feel free to open issues, suggest features, and submit pull requests.
