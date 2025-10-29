@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+    - name: app
+      image: myapp:latest
+    - name: goss-agent
+      image: goss-agent:latest
+      args: ["--config", "/etc/goss/config.yaml"]
+      ports:
+        - containerPort: 8080   # HTTP /debug/goss/clusters
+        - containerPort: 9090   # /metrics
+      volumeMounts:
+        - name: goss-config
+          mountPath: /etc/goss
+  volumes:
+    - name: goss-config
+      configMap:
+        name: goss-config
